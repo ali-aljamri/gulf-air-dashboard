@@ -3,42 +3,42 @@ import requests
 
 app = Flask(__name__)
 
-API_KEY = '0651284ee8a86396948252c9c3b9aae5'
+API_KEY = '0651284ee8a86396948252c9c3b9aae5'  # Replace this with your real API key
 
 TEMPLATE = """
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Live Gulf Air Flights</title>
+    <title>Gulf Air Flights (Live)</title>
     <meta http-equiv="refresh" content="60">
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f0f4f7; padding: 20px; }
+        body { font-family: Arial, sans-serif; background: #f9f9f9; padding: 20px; }
         h1 { color: #005587; }
-        table { width: 100%; border-collapse: collapse; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
         th { background-color: #005587; color: white; }
     </style>
 </head>
 <body>
-    <h1>Live Gulf Air Flights (GF)</h1>
+    <h1>Live Gulf Air Flights</h1>
     <table>
         <thead>
             <tr>
-                <th>Flight Number</th>
-                <th>Departure</th>
-                <th>Arrival</th>
+                <th>Flight</th>
+                <th>From</th>
+                <th>To</th>
                 <th>Status</th>
             </tr>
         </thead>
         <tbody>
-            {% for flight in flights %}
+        {% for flight in flights %}
             <tr>
-                <td>{{ flight['flight']['iata'] }}</td>
-                <td>{{ flight['departure']['airport'] }} ({{ flight['departure']['iata'] }})</td>
-                <td>{{ flight['arrival']['airport'] }} ({{ flight['arrival']['iata'] }})</td>
-                <td>{{ flight['flight_status'] }}</td>
+                <td>{{ flight['flight']['iata'] or 'N/A' }}</td>
+                <td>{{ flight['departure']['airport'] or 'N/A' }} ({{ flight['departure']['iata'] or '' }})</td>
+                <td>{{ flight['arrival']['airport'] or 'N/A' }} ({{ flight['arrival']['iata'] or '' }})</td>
+                <td>{{ flight['flight_status'] or 'N/A' }}</td>
             </tr>
-            {% endfor %}
+        {% endfor %}
         </tbody>
     </table>
 </body>
@@ -50,15 +50,14 @@ def index():
     url = 'http://api.aviationstack.com/v1/flights'
     params = {
         'access_key': API_KEY,
-        'airline_iata': 'GF'  # Gulf Air
+        'airline_iata': 'GF'
     }
-
     try:
         response = requests.get(url, params=params)
         flights = response.json().get('data', [])
         return render_template_string(TEMPLATE, flights=flights)
     except Exception as e:
-        return f"<p>Error fetching flight data: {e}</p>"
+        return f"<p>Error: {e}</p>"
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
