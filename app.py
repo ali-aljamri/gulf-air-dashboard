@@ -23,7 +23,7 @@ TEMPLATE = """
     </style>
 </head>
 <body>
-    <h1>Live Gulf Air Flights at Bahrain (BAH)</h1>
+    <h1>Gulf Air Flights - Bahrain International Airport</h1>
     <table>
         <tr>
             <th>Flight</th>
