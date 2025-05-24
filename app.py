@@ -12,7 +12,7 @@ TEMPLATE = """
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Gulf Air Flights - Bahrain</title>
+    <title>Gulf Air Flights - Bahrain International Airport</title>
     <meta http-equiv="refresh" content="60">
     <style>
         body { font-family: Arial; background: #f4f4f4; padding: 20px; }
