@@ -5,7 +5,7 @@ import pytz
 
 app = Flask(__name__)
 
-API_KEY = 'YOUR_API_KEY'  # Replace with your AviationStack API key
+API_KEY = '0651284ee8a86396948252c9c3b9aae5'  # Replace with your AviationStack API key
 BAHRAIN_TZ = pytz.timezone('Asia/Bahrain')
 
 TEMPLATE = """
