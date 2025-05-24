@@ -23,7 +23,7 @@ TEMPLATE = """
     </style>
 </head>
 <body>
-    <h1>Gulf Air Flights - Bahrain International Airport</h1>
+    <h1>Gulf Air Flights - Bahrain International Airport (BAH)</h1>
     <table>
         <tr>
             <th>Flight</th>
@@ -36,11 +36,11 @@ TEMPLATE = """
         {% for flight in flights %}
         <tr>
             <td>{{ flight['flight']['iata'] or '-' }}</td>
-            <td>{{ flight['departure']['airport'] or '-' }}</td>
-            <td>{{ flight['departure_local'] or '-' }}</td>
-            <td>{{ flight['arrival']['airport'] or '-' }}</td>
-            <td>{{ flight['arrival_local'] or '-' }}</td>
-            <td>{{ flight['flight_status'] or '-' }}</td>
+            <td>{{ flight['departure']['airport'] }} ({{ flight['departure']['iata'] or '-' }})</td>
+            <td>{{ flight['departure_local'] }}</td>
+            <td>{{ flight['arrival']['airport'] }} ({{ flight['arrival']['iata'] or '-' }})</td>
+            <td>{{ flight['arrival_local'] }}</td>
+            <td>{{ flight['flight_status'] }}</td>
         </tr>
         {% endfor %}
     </table>
@@ -65,9 +65,8 @@ def index():
             dep = flight.get('departure', {})
             arr = flight.get('arrival', {})
 
-            # Only show flights where BAH is departure or arrival
+            # Only include flights to or from Bahrain International (BAH)
             if dep.get('iata') == 'BAH' or arr.get('iata') == 'BAH':
-                # Convert UTC times to local
                 flight['departure_local'] = format_time(dep.get('scheduled'))
                 flight['arrival_local'] = format_time(arr.get('scheduled'))
                 filtered.append(flight)
@@ -75,7 +74,7 @@ def index():
         return render_template_string(TEMPLATE, flights=filtered)
 
     except Exception as e:
-        return f"<p>Error: {e}</p>"
+        return f"<p>Error fetching data: {e}</p>"
 
 def format_time(utc_time):
     try:
