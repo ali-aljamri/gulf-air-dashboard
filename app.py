@@ -5,14 +5,14 @@ import pytz
 
 app = Flask(__name__)
 
-API_KEY = '0651284ee8a86396948252c9c3b9aae5'  # Replace with your AviationStack API key
+API_KEY = 'YOUR_API_KEY'  # Replace with your AviationStack API key
 BAHRAIN_TZ = pytz.timezone('Asia/Bahrain')
 
 TEMPLATE = """
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Gulf Air Flights - Bahrain</title>
+    <title>Gulf Air Flights - Bahrain International Airport</title>
     <meta http-equiv="refresh" content="60">
     <style>
         body { font-family: Arial; background: #f4f4f4; padding: 20px; }
@@ -23,7 +23,7 @@ TEMPLATE = """
     </style>
 </head>
 <body>
-    <h1>Live Gulf Air Flights at Bahrain (BAH)</h1>
+    <h1>Gulf Air Flights - Bahrain International Airport (BAH)</h1>
     <table>
         <tr>
             <th>Flight</th>
@@ -36,9 +36,9 @@ TEMPLATE = """
         {% for flight in flights %}
         <tr>
             <td>{{ flight['flight']['iata'] or '-' }}</td>
-            <td>{{ flight['departure']['country'] or 'N/A' }} ({{ flight['departure']['iata'] or '-' }})</td>
+            <td>{{ flight['departure']['airport'] }} ({{ flight['departure']['iata'] or '-' }})</td>
             <td>{{ flight['departure_local'] }}</td>
-            <td>{{ flight['arrival']['country'] or 'N/A' }} ({{ flight['arrival']['iata'] or '-' }})</td>
+            <td>{{ flight['arrival']['airport'] }} ({{ flight['arrival']['iata'] or '-' }})</td>
             <td>{{ flight['arrival_local'] }}</td>
             <td>{{ flight['flight_status'] }}</td>
         </tr>
@@ -65,6 +65,7 @@ def index():
             dep = flight.get('departure', {})
             arr = flight.get('arrival', {})
 
+            # Only include flights to or from Bahrain International (BAH)
             if dep.get('iata') == 'BAH' or arr.get('iata') == 'BAH':
                 flight['departure_local'] = format_time(dep.get('scheduled'))
                 flight['arrival_local'] = format_time(arr.get('scheduled'))
